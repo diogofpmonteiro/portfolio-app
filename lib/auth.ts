@@ -10,6 +10,10 @@ export const auth = betterAuth({
     github: {
       clientId: env.AUTH_GITHUB_CLIENT_ID,
       clientSecret: env.AUTH_GITHUB_SECRET,
+      redirectURI:
+        env.ENVIRONMENT === "development"
+          ? env.LOCALHOST_URL + "/api/auth/callback/github"
+          : env.PRODUCTION_URL + "/api/auth/callback/github",
     },
   },
   plugins: [admin(), anonymous()],

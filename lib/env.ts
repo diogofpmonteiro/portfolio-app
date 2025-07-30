@@ -6,6 +6,9 @@ export const env = createEnv({
     DATABASE_URL: z.url(),
     AUTH_GITHUB_CLIENT_ID: z.string().min(1),
     AUTH_GITHUB_SECRET: z.string().min(1),
+    ENVIRONMENT: z.enum(["development", "production", "test"]).default("development"),
+    LOCALHOST_URL: z.url().default("http://localhost:3000"),
+    PRODUCTION_URL: z.url(),
   },
   client: {
     NEXT_PUBLIC_EMAIL_PUBLIC_KEY: z.string().min(1),
@@ -19,5 +22,8 @@ export const env = createEnv({
     NEXT_PUBLIC_EMAIL_PUBLIC_KEY: process.env.NEXT_PUBLIC_EMAIL_PUBLIC_KEY,
     NEXT_PUBLIC_EMAIL_SERVICE_ID: process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID,
     NEXT_PUBLIC_EMAIL_TEMPLATE_ID: process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID,
+    ENVIRONMENT: process.env.ENVIRONMENT || "development",
+    LOCALHOST_URL: process.env.LOCALHOST_URL || "http://localhost:3000",
+    PRODUCTION_URL: process.env.PRODUCTION_URL,
   },
 });
