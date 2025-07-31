@@ -3,9 +3,10 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Github, Edit, Trash2 } from "lucide-react";
+import { ExternalLink, Github, Edit, Trash2, Loader2Icon, UserIcon } from "lucide-react";
 import Image from "next/image";
 import { Project } from "@/lib/types";
+import { useAnonymousLogin } from "@/hooks/use-anonymous-login";
 
 interface ProjectModalProps {
   project: Project | null;
@@ -17,6 +18,8 @@ interface ProjectModalProps {
 }
 
 const ProjectModal = ({ project, isOpen, onClose, isLoggedIn = false, onEdit, onDelete }: ProjectModalProps) => {
+  const { signInAnonymously, isAnonymousLoginPending } = useAnonymousLogin();
+
   if (!project) return null;
 
   const handleEdit = () => onEdit && onEdit(project);
@@ -63,6 +66,29 @@ const ProjectModal = ({ project, isOpen, onClose, isLoggedIn = false, onEdit, on
             <h3 className='text-lg font-semibold mb-3'>About This Project</h3>
             <p className='text-muted-foreground leading-relaxed'>{project.longDescription}</p>
           </div>
+
+          {!isLoggedIn && project.title === "Portfolio Manager" && (
+            <Button
+              className='w-fit'
+              variant='outline'
+              onClick={() => {
+                signInAnonymously();
+                onClose();
+              }}
+              disabled={isAnonymousLoginPending}>
+              {isAnonymousLoginPending ? (
+                <>
+                  <Loader2Icon className='size-4 animate-spin' />
+                  <span>Loading...</span>
+                </>
+              ) : (
+                <>
+                  <UserIcon className='size-4' />
+                  Login as a Guest
+                </>
+              )}
+            </Button>
+          )}
 
           {/* Technologies */}
           <div>

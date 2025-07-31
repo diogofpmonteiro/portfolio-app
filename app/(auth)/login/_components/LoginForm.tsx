@@ -2,17 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAnonymousLogin } from "@/hooks/use-anonymous-login";
 import { authClient } from "@/lib/auth-client";
 import { Loader2Icon, GithubIcon, UserIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
 export const LoginForm = () => {
   const [githubPending, startGithubTransition] = useTransition();
-  const [anonymousPending, startAnonymousTransition] = useTransition();
 
-  const router = useRouter();
+  const { signInAnonymously, isAnonymousLoginPending } = useAnonymousLogin();
 
   const signInWithGithub = async () => {
     startGithubTransition(async () => {
@@ -31,22 +30,6 @@ export const LoginForm = () => {
     });
   };
 
-  const signInAnonymously = async () => {
-    startAnonymousTransition(async () => {
-      await authClient.signIn.anonymous({
-        fetchOptions: {
-          onSuccess: () => {
-            toast.success("Signed in anonymously, you will be redirected..");
-            router.push("/");
-          },
-          onError: () => {
-            toast.error("Failed to sign in anonymously");
-          },
-        },
-      });
-    });
-  };
-
   return (
     <Card>
       <CardHeader>
@@ -59,7 +42,7 @@ export const LoginForm = () => {
           className='w-full'
           variant='outline'
           onClick={signInWithGithub}
-          disabled={githubPending || anonymousPending}>
+          disabled={githubPending || isAnonymousLoginPending}>
           {githubPending ? (
             <>
               <Loader2Icon className='size-4 animate-spin' />
@@ -81,8 +64,8 @@ export const LoginForm = () => {
           className='w-full'
           variant='outline'
           onClick={signInAnonymously}
-          disabled={anonymousPending || githubPending}>
-          {anonymousPending ? (
+          disabled={isAnonymousLoginPending || githubPending}>
+          {isAnonymousLoginPending ? (
             <>
               <Loader2Icon className='size-4 animate-spin' />
               <span>Loading...</span>
