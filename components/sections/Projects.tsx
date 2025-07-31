@@ -80,6 +80,7 @@ const ProjectsSection = ({ projects }: { projects: Project[] }) => {
                           src={project.image}
                           alt={project.title}
                           fill
+                          priority
                           className='object-cover group-hover:scale-105 transition-transform duration-300'
                         />
                         <div className='absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300'></div>
@@ -170,6 +171,7 @@ const ProjectsSection = ({ projects }: { projects: Project[] }) => {
                       src={project.image}
                       alt={project.title}
                       fill
+                      priority
                       className='object-cover group-hover:scale-105 transition-transform duration-300'
                     />
                     <div className='absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300'></div>
